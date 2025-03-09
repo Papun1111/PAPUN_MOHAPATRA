@@ -186,7 +186,7 @@ const Navbar = () => {
               shadow-md
             "
           >
-            {['Home', 'About Me', 'Services', 'My Work', 'Contact Me'].map((item, idx) => (
+            {['Home', 'About Me', 'Tech Stack', 'My Work',].map((item, idx) => (
               <a
                 key={idx}
                 href={`#${item.replace(/\s/g, '').toLowerCase()}`}

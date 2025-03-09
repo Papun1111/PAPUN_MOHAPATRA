@@ -116,8 +116,9 @@ function Works() {
                 <Image
                   src={item.image}
                   alt={item.title}
-                  layout="responsive"
-                  objectFit="cover"
+                  width={item.image.width || 500}
+                  height={item.image.height || 300}
+                  style={{ objectFit: "cover" }}
                   className="w-full"
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-150">

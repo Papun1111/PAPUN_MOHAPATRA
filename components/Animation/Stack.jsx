@@ -1,5 +1,8 @@
+"use client";
+
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
+import Image from "next/image";
 
 function CardRotate({ children, onSendToBack, sensitivity }) {
   const x = useMotionValue(0);
@@ -8,10 +11,7 @@ function CardRotate({ children, onSendToBack, sensitivity }) {
   const rotateY = useTransform(x, [-100, 100], [-60, 60]);
 
   function handleDragEnd(_, info) {
-    if (
-      Math.abs(info.offset.x) > sensitivity ||
-      Math.abs(info.offset.y) > sensitivity
-    ) {
+    if (Math.abs(info.offset.x) > sensitivity || Math.abs(info.offset.y) > sensitivity) {
       onSendToBack();
     } else {
       x.set(0);
@@ -40,17 +40,29 @@ export default function Stack({
   cardDimensions = { width: 208, height: 208 },
   cardsData = [],
   animationConfig = { stiffness: 260, damping: 20 },
-  sendToBackOnClick = false
+  sendToBackOnClick = false,
 }) {
   const [cards, setCards] = useState(
     cardsData.length
       ? cardsData
       : [
-        { id: 1, img: "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format" },
-        { id: 2, img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format" },
-        { id: 3, img: "https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format" },
-        { id: 4, img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format" }
-      ]
+          {
+            id: 1,
+            img: "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format",
+          },
+          {
+            id: 2,
+            img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format",
+          },
+          {
+            id: 3,
+            img: "https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format",
+          },
+          {
+            id: 4,
+            img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format",
+          },
+        ]
   );
 
   const sendToBack = (id) => {
@@ -73,18 +85,12 @@ export default function Stack({
       }}
     >
       {cards.map((card, index) => {
-        const randomRotate = randomRotation
-          ? Math.random() * 10 - 5 // Random degree between -5 and 5
-          : 0;
+        const randomRotate = randomRotation ? Math.random() * 10 - 5 : 0;
 
         return (
-          <CardRotate
-            key={card.id}
-            onSendToBack={() => sendToBack(card.id)}
-            sensitivity={sensitivity}
-          >
+          <CardRotate key={card.id} onSendToBack={() => sendToBack(card.id)} sensitivity={sensitivity}>
             <motion.div
-              className="rounded-2xl overflow-hidden border-4 border-white"
+              className="relative rounded-2xl overflow-hidden border-4 border-white"
               onClick={() => sendToBackOnClick && sendToBack(card.id)}
               animate={{
                 rotateZ: (cards.length - index - 1) * 4 + randomRotate,
@@ -102,10 +108,13 @@ export default function Stack({
                 height: cardDimensions.height,
               }}
             >
-              <img
+              <Image
                 src={card.img}
                 alt={`card-${card.id}`}
-                className="w-full h-full object-cover pointer-events-none"
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 640px) 200px, (max-width: 1024px) 250px, 300px"
+                className="pointer-events-none"
               />
             </motion.div>
           </CardRotate>
